@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const userApi = createApi({
   reducerPath: "userAPI",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:4000/api/v1/",
+    baseUrl: "http://localhost:4001/api/v1/",
     prepareHeaders: (headers, { getState }) => {
       // Agregar el token de autenticación si existe
       const token = getState().auth.token;
@@ -34,13 +34,13 @@ export const userApi = createApi({
     }),
     // Obtiene la imagen de perfil
     getProfile: builder.query({
-      query: (userId) => `/users/profile/${userId}`,
+      query: (userId) => `/users/profile/${userId}/upload-image`,
       providesTags: ["Profile"],
     }),
     // Para actualizar la imagen de perfil
     updateProfile: builder.mutation({
       query: ({ userId, formData }) => ({
-        url: `/users/profile/${userId}`,
+        url: `/users/profile/${userId}/upload-image`,
         method: "PUT",
         body: formData,
       }),

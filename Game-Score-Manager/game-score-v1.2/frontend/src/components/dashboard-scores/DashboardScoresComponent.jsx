@@ -14,7 +14,6 @@ import {
 import { useSelector } from "react-redux";
 import { logout } from "@/store/features/authSlice";
 import { useDispatch } from "react-redux";
-import ProfileImageComponent from "../profile-img-component/ProfileImageComponent";
 
 const DashboardScoresComponent = () => {
   const dispatch = useDispatch();
@@ -62,12 +61,12 @@ const DashboardScoresComponent = () => {
               <Nav className="ms-auto text-color">
                 <Nav.Link onClick={handleDashboardButton}>Inicio</Nav.Link>
                 <Nav.Link href="scores">Puntuaciones</Nav.Link>
-                {/* <Image
+                <Image
                   src="/images/img-profile.png"
                   rounded
                   className="profile-image"
-                /> */}
-                <ProfileImageComponent />
+                />
+                {/* <ProfileImageComponent /> */}
                 <NavDropdown title={userEmail} id="basic-nav-dropdown">
                   <NavDropdown.Item onClick={handleDashboardProfile}>
                     Perfil

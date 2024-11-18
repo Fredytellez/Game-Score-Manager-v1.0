@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './module/auth/auth.module';
 import { ScoresModule } from './module/scores/scores.module';
 import { UsersModule } from './module/users/users.module';
@@ -10,6 +9,7 @@ import { multerConfig } from './module/users/config/multer.config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './module/prisma/prisma.module';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
