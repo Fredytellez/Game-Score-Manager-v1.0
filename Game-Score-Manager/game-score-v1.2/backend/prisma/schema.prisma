@@ -1,0 +1,23 @@
+// prisma/schema.prisma
+
+// Conexion a PostgreSQL
+datasource postgres {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// Generador para Prisma Client
+generator client {
+    provider = "prisma-client-js"
+}
+
+// Modelo para PostgreSQL
+model User {
+    id           Int      @id @default(autoincrement())
+    username     String   @unique
+    email        String   @unique
+    password     String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    profileImage String?
+}

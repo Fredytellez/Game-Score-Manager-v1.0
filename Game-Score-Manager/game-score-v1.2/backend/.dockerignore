@@ -1,0 +1,20 @@
+# Ignorar node_modules (evita duplicar dependencias)
+node_modules
+
+# Ignorar archivos de configuración local
+.env
+.env.local
+
+# Ignorar carpetas y archivos específicos de desarrollo
+dist
+.idea
+.vscode
+.DS_Store
+
+# Ignorar archivos de control de versiones
+.git
+.gitignore
+
+# Ignorar logs y archivos temporales
+npm-debug.log*
+.pnpm-debug.log*

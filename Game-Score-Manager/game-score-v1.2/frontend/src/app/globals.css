@@ -1,0 +1,133 @@
+body {
+  font-family: var(--font-rajdhani), sans-serif;
+  color: #ffff;
+}
+
+span {
+  color: #ffff;
+}
+
+text-color {
+  color: #ffff;
+}
+
+.score-logo {
+  font-size: larger;
+  color: #fd6703;
+  font-weight: 600;
+}
+
+.nav-link{
+  font-weight: 600;
+}
+
+.custom-navbar {
+  background-color: #343a40; /* Color de fondo del navbar */
+  color: white; /* Color de texto */
+  position: fixed; /* Fija el navbar */
+  width: 100%; /* Asegura que el navbar ocupe todo el ancho */
+  top: 0; /* Fija el navbar en la parte superior */
+  z-index: 1030; /* Asegura que el navbar esté por encima de otros elementos */
+  padding: 4px 0;
+}
+
+.custom-navbar .profile-image {
+  width: 40px; /* Ajusta el tamaño de la imagen según tus necesidades */
+  height: 40px;
+  border-radius: 50%; /* Para que sea redonda */
+  margin-left: 15px; /* Espacio a la izquierda de la imagen */
+}
+
+.home-title {
+  font-weight: 900;
+}
+
+.reset-password-message {
+  display: flex;
+  flex-direction: column;
+}
+
+.reset-password-message span {
+  color: #f9a56d;
+}
+
+.nav-link:hover {
+  color: #fd6703;
+}
+
+.span-link{
+  color: #d5d5d5;
+}
+.span-link:hover {
+  color: #f9a56d;
+}
+
+.button-form {
+  background-color: #fd6703;
+  border: none;
+}
+.button-form:hover {
+  background-color: #5a6b86;
+  color: white;
+}
+
+/* Estilos para pantallas pequeñas */
+@media (max-width: 576px) {
+  .custom-navbar {
+    background-color: rgba(
+      39,
+      40,
+      67,
+      0.8
+    ); /* Cambiar el fondo para pantallas pequeñas */
+  }
+
+  form {
+    max-width: 100%; /* El formulario ocupa todo el ancho disponible */
+    margin-top: 10px; /* Menos espacio superior */
+  }
+}
+
+/* Estilos para pantallas pequeñas */
+@media (max-width: 576px) {
+  .custom-navbar {
+    background-color: rgba(
+      39,
+      40,
+      67,
+      0.8
+    ); /* Cambiar el fondo para pantallas pequeñas */
+  }
+
+  .responsive-form {
+    max-width: 100%; /* El formulario ocupa todo el ancho disponible */
+    margin-top: 10px; /* Menos espacio superior */
+  }
+}
+
+/* Estilos para la tabla y paginacion en el dashboard */
+
+.pagination-dark .page-link {
+  color: white;
+  background-color: #343a40;
+  border: 1px solid #343a40;
+}
+
+.pagination-dark .page-link:hover {
+  color: white;
+  background-color: #fd6703dc;
+  border-color: #343a40;
+}
+
+.pagination-dark .page-item.active .page-link {
+  color: white;
+  background-color: #fd6703;
+  border-color: #fd6703;
+}
+
+.pagination-dark .page-item.disabled .page-link {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: #343a40;
+  border-color: #343a40;
+}
