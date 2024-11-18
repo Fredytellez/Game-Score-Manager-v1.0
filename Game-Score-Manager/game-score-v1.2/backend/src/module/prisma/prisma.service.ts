@@ -25,11 +25,4 @@ export class PrismaService
   async onModuleDestroy() {
     await this.$disconnect();
   }
-
-  /* // Método para crear un usuario
-  async createUser(userdata: Prisma.UserCreateInput): Promise<User> {
-    return this.user.create({
-      data: userdata,
-    });
-  } */
 }

@@ -2,19 +2,20 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { User } from './interfaces/user.interface';
 import * as bcrypt from 'bcrypt';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/module/prisma/prisma.service';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   //Crear usuario
-
   async create(userdata: Prisma.UserCreateInput): Promise<User> {
     try {
       return this.prisma.user.create({
@@ -67,26 +68,34 @@ export class UsersService {
       where: { email },
     });
   }
-  // actualizar usuario y se agrega el cambio de imagen de perfil
-  /* async update(userId: string, updateData: Partial<User>): Promise<User> {
-    const user = await this.findById(userId);
-
-    // Si hay una nueva imagen y existe una imagen anterior, eliminar la anterior
-    if (updateData.profileImage && user.profileImage) {
-      const oldImagePath = join(
-        process.cwd(),
-        'uploads/profiles',
-        user.profileImage,
-      );
-      try {number
-        await fs.unlink(oldImagePath);
-      } catch (error) {
-        console.error('Error deleting old profile image:', error);
-      }
+  // Cambio de rol de usuario
+  async updateUserRole(userId: number, newRole: Role) {
+    console.log(`Changing role for user ${userId} to ${newRole}`);
+    // Validación del id del usuario
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new NotFoundException(`User with Id: ${userId} not found`);
     }
-    Object.assign(user, updateData, { updatedAt: new Date() });
-    return user;
-  } */
+    // Verifica el rol
+    // Prevenir cambios innecesarios
+    if (user.role === newRole) {
+      console.log(`User ${userId} already has role ${newRole}`);
+      return user;
+    }
+    try {
+      const updatedUser = await this.prisma.user.update({
+        where: { id: userId },
+        data: { role: newRole },
+      });
+      console.log('Usuario actualizado:', updatedUser);
+      return updatedUser;
+    } catch (error) {
+      console.error('Error updating user role:', error);
+      throw new InternalServerErrorException('Could not update user role');
+    }
+  }
 
   // actualizar usuario valida que no exista el username
   async update(
@@ -129,28 +138,78 @@ export class UsersService {
     }
   }
 
+  // Actualizar imagen de usuario
+  async updateProfileImage(userId: number, filePath: string) {
+    try {
+      // Verificar si el usuario existe
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        throw new NotFoundException(`Usuario con ID ${userId} no encontrado`);
+      }
+
+      // Actualizar la imagen de perfil
+      const updatedUser = await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          profileImage: filePath,
+        },
+      });
+
+      return updatedUser;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al actualizar la imagen de perfil',
+      );
+    }
+  }
+
   // Obtener todos los usuarios
   async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
-  }
-  /* async getUserScore(userId: string): Promise<Score[]> {
-    await this.findById(userId); // Veririfica que el usuario exista
-    return this.scores.filter((score) => score.userId === userId);
-  } */
-  /* async getUserScore(userId: number): Promise<Score[]> {
-    await this.findById(userId);
-    return this.prisma.score.findMany({
-      where: { userId },
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        password: true,
+        createdAt: true,
+        updatedAt: true,
+        profileImage: true,
+        role: true, // Asegúrate de seleccionar 'role'
+      },
     });
-  } */
+  }
+
   // Eliminar usuario
   async remove(userId: number) {
     try {
+      // Intentar eliminar el usuario con el ID proporcionado
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+      });
+
+      // Si el usuario no se encuentra, lanzamos un error específico
+      if (!user) {
+        throw new NotFoundException(`User with ID ${userId} not found`);
+      }
+
       return await this.prisma.user.delete({
         where: { id: userId },
       });
     } catch (error) {
-      throw new NotFoundException(`Player with ID ${userId} not found`, error);
+      // Mostrar más detalles sobre el error
+      console.error('Error during user deletion: ', error);
+      if (error instanceof NotFoundException) {
+        throw error; // Si es un error de "usuario no encontrado", lo lanzamos de nuevo
+      }
+
+      // Si es otro tipo de error, lanzamos una excepción interna del servidor
+      throw new InternalServerErrorException(
+        `An error occurred while trying to delete user with ID ${userId}: ${error.message}`,
+      );
     }
   }
 }

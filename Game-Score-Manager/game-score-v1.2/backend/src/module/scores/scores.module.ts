@@ -4,6 +4,7 @@ import { ScoresController } from './scores.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Score, ScoreSchema } from './schemas/score.schemas';
 import { UsersModule } from '../users/users.module';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
   imports: [
@@ -11,6 +12,6 @@ import { UsersModule } from '../users/users.module';
     UsersModule,
   ],
   controllers: [ScoresController],
-  providers: [ScoresService],
+  providers: [ScoresService, PrismaService],
 })
 export class ScoresModule {}

@@ -1,6 +1,6 @@
-import { FileInterceptor } from '@nestjs/platform-express';
 import { Injectable, mixin, NestInterceptor, Type } from '@nestjs/common';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 
@@ -15,7 +15,7 @@ export function CustomFileInterceptor(
     intercept(...args: Parameters<NestInterceptor['intercept']>) {
       const multerOptions: MulterOptions = {
         storage: diskStorage({
-          destination: './uploads/profiles',
+          destination: './uploads/profiles', // Carpeta temporal de subida
           filename: (req, file, callback) => {
             const uniqueSuffix =
               Date.now() + '-' + Math.round(Math.random() * 1e9);

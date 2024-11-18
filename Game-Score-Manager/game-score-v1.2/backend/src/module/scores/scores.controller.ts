@@ -1,47 +1,51 @@
 import {
-  Body,
   Controller,
   Get,
   Param,
+  NotFoundException,
   ParseIntPipe,
+  InternalServerErrorException,
+  Body,
   Post,
-  Query,
 } from '@nestjs/common';
 import { ScoresService } from './scores.service';
-import { CreateScoreDto } from './dto/create.score.dot';
 
 @Controller('scores')
 export class ScoresController {
   constructor(private readonly scoresService: ScoresService) {}
 
-  @Post()
-  create(@Body() createScoreDto: CreateScoreDto) {
-    return this.scoresService.create(createScoreDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.scoresService.findAll();
-  }
-
-  // Obtiene todos los pundajes del usuario
-  @Get('scores/:userId')
-  findByUser(@Param('id', ParseIntPipe) userId: number) {
-    return this.scoresService.findByUser(userId);
-  }
-
-  // Obtiene un ranking de los mejores puntajes
-  @Get('scores/leaderboard')
-  getGlobalTopScores(@Query('limit', ParseIntPipe) limit: number = 10) {
-    return this.scoresService.getGlobalTopScores(limit);
-  }
-
-  // Obtiene el ranking de los jugadores con mejor puntaje
-  @Get('player/leaderboard/:userId')
-  getPlayerTopScores(
-    @Param('id', ParseIntPipe) playerId: number,
-    @Query('limit', ParseIntPipe) limit: number = 10,
+  // Ruta para crear una puntuación
+  @Post('user/:userId')
+  async createScore(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body('score') score: number,
+    @Body('game') game: string,
   ) {
-    return this.scoresService.getUserTopScores(playerId, limit);
+    try {
+      // Llamar al servicio para crear la puntuación
+      return await this.scoresService.createScore(userId, score, game);
+    } catch (error) {
+      // Manejo de error y respuesta apropiada
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      } else {
+        throw new InternalServerErrorException('Error al crear la puntuación');
+      }
+    }
+  }
+
+  // Ruta para obtener las puntuaciones de un usuario
+  @Get('user/:userId')
+  async getScoresByUser(@Param('userId', ParseIntPipe) userId: number) {
+    try {
+      // Llamar al servicio para obtener las puntuaciones
+      return await this.scoresService.getScoresByUser(userId);
+    } catch (error) {
+      console.log(error);
+      // Manejo de error y respuesta apropiada
+      throw new InternalServerErrorException(
+        'Error al obtener las puntuaciones',
+      );
+    }
   }
 }

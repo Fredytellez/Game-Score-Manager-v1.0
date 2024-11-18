@@ -8,6 +8,13 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
+import { Role } from '@prisma/client';
+
+interface JwtPayload {
+  sub: number;
+  email: string;
+  role: Role;
+}
 
 @Injectable()
 export class AuthService {
@@ -15,6 +22,54 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
+
+  // Método para generar token
+  generateToken(user: { id: number; email: string; role: Role }) {
+    const payload: JwtPayload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    };
+    return {
+      access_token: this.jwtService.sign(payload, {
+        secret: process.env.JWT_SECRET,
+        expiresIn: '24h',
+      }),
+    };
+  }
+
+  // Método para cambiar rol (solo para administradores)
+  async changeUserRole(adminId: number, userId: number, newRole: Role) {
+    // Primero, verificar que el admin que solicita el cambio existe
+    const admin = await this.usersService.findById(adminId);
+
+    if (!admin || admin.role !== Role.ADMIN) {
+      throw new UnauthorizedException(
+        'Solo un administrador puede cambiar roles',
+      );
+    }
+
+    // Cambiar el rol del usuario
+    return this.usersService.updateUserRole(userId, newRole);
+  }
+
+  // Método para validar token (opcional, pero útil)
+  async validateToken(token: string): Promise<JwtPayload> {
+    try {
+      return this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET,
+      });
+    } catch (error) {
+      console.log(error);
+      throw new UnauthorizedException('Token inválido');
+    }
+  }
+
+  // Método para obtener usuario desde el token
+  async getUserFromToken(token: string) {
+    const payload = await this.validateToken(token);
+    return this.usersService.findById(payload.sub);
+  }
 
   async register(registerDto: RegisterDto) {
     // Valida por usuario:
@@ -40,7 +95,7 @@ export class AuthService {
         ...registerDto,
         password: hashedPasspord,
       });
-      return user; /* this.generateToken(user); */
+      return user;
     } catch (error) {
       console.error('Error en register:', error);
       throw new HttpException(
@@ -68,13 +123,6 @@ export class AuthService {
       throw new UnauthorizedException('Incorrect Password');
     }
 
-    return user; /* this.generateToken(user) */
+    return user;
   }
-
-  /* private generateToken(user: User) {
-    const payload = { sub: user.id, email: user.email };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  } */
 }

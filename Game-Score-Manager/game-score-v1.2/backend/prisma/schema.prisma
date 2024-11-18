@@ -1,23 +1,36 @@
-// prisma/schema.prisma
-
-// Conexion a PostgreSQL
-datasource postgres {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
-}
-
-// Generador para Prisma Client
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
-// Modelo para PostgreSQL
+datasource postgres {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  PLAYER
+}
+
 model User {
-    id           Int      @id @default(autoincrement())
-    username     String   @unique
-    email        String   @unique
-    password     String
-    createdAt    DateTime @default(now())
-    updatedAt    DateTime @updatedAt
-    profileImage String?
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  email        String   @unique
+  password     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  profileImage String?
+  isActive     Boolean  @default(true)
+  role         Role     @default(PLAYER)
+  Score        Score[]
+}
+
+model Score {
+  id        Int      @id @default(autoincrement())
+  score     Int // La puntuación en el juego
+  game      String // Nombre del juego
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int // Relación con el usuario
+  user      User     @relation(fields: [userId], references: [id])
 }

@@ -9,7 +9,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { multerConfig } from './module/users/config/multer.config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
-import { PrismaModule } from './prisma/prisma.module';
+import { PrismaModule } from './module/prisma/prisma.module';
 
 @Module({
   imports: [

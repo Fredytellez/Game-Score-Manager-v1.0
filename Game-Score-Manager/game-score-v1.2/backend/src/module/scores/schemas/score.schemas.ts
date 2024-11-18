@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type ScoreDocument = Score & Document;
 
-// esquema de Mongoose para MongoDB 
+// esquema de Mongoose para MongoDB
 @Schema()
 export class Score {
   @Prop({ required: true })

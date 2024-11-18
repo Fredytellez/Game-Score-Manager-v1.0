@@ -63,6 +63,29 @@
         ]
       }
     },
+    "/auth/users/{id}/role": {
+      "patch": {
+        "operationId": "AuthController_changeUserRole",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/users/profile/{userId}": {
       "get": {
         "operationId": "UsersController_getProfile",
@@ -154,20 +177,98 @@
         ]
       }
     },
-    "/scores": {
-      "post": {
-        "operationId": "ScoresController_create",
-        "parameters": [],
+    "/users/admin/{userId}/role": {
+      "patch": {
+        "operationId": "UsersController_changeUserRole",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateScoreDto"
+                "$ref": "#/components/schemas/ChangeRoleDto"
               }
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/profile/{userId}/upload-image": {
+      "post": {
+        "operationId": "UsersController_uploadProfileImage",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/delete/{userId}": {
+      "delete": {
+        "operationId": "UsersController_removeUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/scores/user/{userId}": {
+      "post": {
+        "operationId": "ScoresController_createScore",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": ""
@@ -178,80 +279,12 @@
         ]
       },
       "get": {
-        "operationId": "ScoresController_findAll",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Scores"
-        ]
-      }
-    },
-    "/scores/scores/{userId}": {
-      "get": {
-        "operationId": "ScoresController_findByUser",
+        "operationId": "ScoresController_getScoresByUser",
         "parameters": [
           {
-            "name": "id",
+            "name": "userId",
             "required": true,
             "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Scores"
-        ]
-      }
-    },
-    "/scores/scores/leaderboard": {
-      "get": {
-        "operationId": "ScoresController_getGlobalTopScores",
-        "parameters": [
-          {
-            "name": "limit",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Scores"
-        ]
-      }
-    },
-    "/scores/player/leaderboard/{userId}": {
-      "get": {
-        "operationId": "ScoresController_getPlayerTopScores",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "limit",
-            "required": true,
-            "in": "query",
             "schema": {
               "type": "number"
             }
@@ -290,7 +323,7 @@
         "type": "object",
         "properties": {}
       },
-      "CreateScoreDto": {
+      "ChangeRoleDto": {
         "type": "object",
         "properties": {}
       }
