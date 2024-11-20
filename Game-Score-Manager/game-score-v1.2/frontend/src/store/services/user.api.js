@@ -39,10 +39,10 @@ export const userApi = createApi({
     }),
     // Para actualizar la imagen de perfil
     updateProfile: builder.mutation({
-      query: ({ userId, formData }) => ({
+      query: ({ userId, file }) => ({
         url: `/users/profile/${userId}/upload-image`,
         method: "PUT",
-        body: formData,
+        body: file,
       }),
       invalidatesTags: ["Profile"],
     }),
