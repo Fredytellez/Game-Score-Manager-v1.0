@@ -1,14 +1,9 @@
-"use client"
-import RegisterComponent from '@/components/register-component/RegisterComponent'
-import StoreProvider from '@/store/provider'
-import React from 'react'
+"use client";
+import RegisterComponent from "@/components/register-component/RegisterComponent";
+import React from "react";
 
 const registerPage = () => {
-  return (
-    <StoreProvider>
-        <RegisterComponent/>
-    </StoreProvider>
-  )
-}
+  return <RegisterComponent />;
+};
 
-export default registerPage
+export default registerPage;

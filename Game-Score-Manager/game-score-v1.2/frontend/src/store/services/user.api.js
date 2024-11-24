@@ -4,20 +4,8 @@ export const userApi = createApi({
   reducerPath: "userAPI",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:4001/api/v1/",
-    prepareHeaders: (headers, { getState }) => {
-      // Agregar el token de autenticación si existe
-      const token = getState().auth.token;
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
   }),
-  tagTypes: ['Profile'], // agrega el tag profile
   endpoints: (builder) => ({
-    getUsers: builder.query({
-      query: () => "admin/users/",
-    }),
     loginUser: builder.mutation({
       query: (body) => ({
         url: "auth/login",
@@ -39,12 +27,11 @@ export const userApi = createApi({
     }),
     // Para actualizar la imagen de perfil
     updateProfile: builder.mutation({
-      query: ({ userId, file }) => ({
+      query: ({ userId }) => ({
         url: `/users/profile/${userId}/upload-image`,
         method: "PUT",
-        body: file,
+       /*  body: "form-data", */
       }),
-      invalidatesTags: ["Profile"],
     }),
   }),
 });

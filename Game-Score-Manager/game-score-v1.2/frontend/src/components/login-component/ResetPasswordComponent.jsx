@@ -1,3 +1,4 @@
+"use client"
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
@@ -28,7 +29,8 @@ const ResetPasswordComponent = () => {
     }, 1000);
   };
 
-  const handleLoginButton = () => {
+  const handleLoginButton = (event) => {
+    event.preventDefault();
     router.push("/login");
   };
 

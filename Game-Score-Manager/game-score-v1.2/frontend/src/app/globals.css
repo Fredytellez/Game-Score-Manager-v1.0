@@ -17,11 +17,13 @@ text-color {
   font-weight: 600;
 }
 
-.nav-link{
+.nav-link {
   font-weight: 600;
 }
 
 .custom-navbar {
+  /* justify-content: center;
+  align-items: center; */
   background-color: #343a40; /* Color de fondo del navbar */
   color: white; /* Color de texto */
   position: fixed; /* Fija el navbar */
@@ -31,11 +33,24 @@ text-color {
   padding: 4px 0;
 }
 
-.custom-navbar .profile-image {
-  width: 40px; /* Ajusta el tamaño de la imagen según tus necesidades */
-  height: 40px;
-  border-radius: 50%; /* Para que sea redonda */
-  margin-left: 15px; /* Espacio a la izquierda de la imagen */
+/* .custom-navbar .profile-image {
+  width: 20px; 
+  height: 20px;
+  border-radius: 50%; 
+  margin-left: 15px; 
+} */
+
+.profile-container {
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.profile-container img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .home-title {
@@ -55,7 +70,7 @@ text-color {
   color: #fd6703;
 }
 
-.span-link{
+.span-link {
   color: #d5d5d5;
 }
 .span-link:hover {

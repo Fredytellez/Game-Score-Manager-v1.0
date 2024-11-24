@@ -1,38 +1,29 @@
 "use client";
+import { logout } from "@/store/features/usernameSlice";
 import { useRouter } from "next/navigation";
 import React from "react";
-import {
-  Container,
-  Image,
-  Nav,
-  Navbar,
-  NavDropdown,
-  Pagination,
-  Stack,
-  Table,
-} from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { logout } from "@/store/features/authSlice";
-import { useDispatch } from "react-redux";
-import ProfileImageComponent from "../profile-img-component/ProfileImageComponent";
+import { Container, Image, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
 
 const DashboardPageComponent = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const loginEmail = useSelector((state) => state.login.email);
-  const registerEmail = useSelector((state) => state.register.username);
-  const userEmail = loginEmail || registerEmail || "User Name";
+  const user = useSelector((state) => state.user.username);
+  const userName = user || "Name";
 
-  const handleLogout = () => {
+  const handleLogout = (event) => {
+    event.preventDefault();
     // logica para el cierre de sesion.
     dispatch(logout());
     router.push("/login");
   };
 
-  const handleDashboardProfile = () => {
+  const handleDashboardProfile = (event) => {
+    event.preventDefault();
     router.push("dashboard/profile");
   };
-  const handleDashboardScores = () => {
+  const handleDashboardScores = (event) => {
+    event.preventDefault();
     router.push("dashboard/scores");
   };
 
@@ -54,19 +45,24 @@ const DashboardPageComponent = () => {
           style={{ backgroundColor: "rgba(39, 40, 67, 0.61)" }}
         >
           <Container>
-            <Navbar.Brand href="dashboard">
+            <Navbar.Brand >
               <span className="score-logo">Game Score Manager</span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ms-auto text-color">
-                <Nav.Link href="dashboard">Inicio</Nav.Link>
                 <Nav.Link onClick={handleDashboardScores}>
                   Puntuaciones
                 </Nav.Link>
-                {/* Imagen de perfil */}
+                <div className="profile-container">
+                  <Image
+                    src="/images/img-profile.png"
+                    rounded
+                    className="profile-image"
+                  />
+                </div>
                 {/* <ProfileImageComponent /> */}
-                <NavDropdown title={userEmail} id="basic-nav-dropdown">
+                <NavDropdown title={userName} id="basic-nav-dropdown">
                   <NavDropdown.Item onClick={handleDashboardProfile}>
                     Perfil
                   </NavDropdown.Item>
@@ -86,6 +82,7 @@ const DashboardPageComponent = () => {
           </Container>
         </Navbar>
 
+        {/* Contenedor de edicion y adicion de puntuaciones */}
         <Container
           className="d-flex flex-column justify-content-center align-items-center"
           style={{
@@ -152,6 +149,10 @@ const DashboardPageComponent = () => {
               </p>
             </div>
           </div>
+        </Container>
+
+        <Container>
+
         </Container>
       </div>
     </div>

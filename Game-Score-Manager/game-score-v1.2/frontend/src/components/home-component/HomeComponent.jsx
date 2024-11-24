@@ -6,10 +6,12 @@ import { Container, Navbar, Nav, Button } from "react-bootstrap";
 const HomeComponent = () => {
   const router = useRouter();
 
-  const handleRegisterButton = () => {
+  const handleRegisterButton = (event) => {
+    event.preventDefault();
     router.push("/register");
   };
-  const handleLoginButton = () => {
+  const handleLoginButton = (event) => {
+    event.preventDefault();
     router.push("/login");
   };
 

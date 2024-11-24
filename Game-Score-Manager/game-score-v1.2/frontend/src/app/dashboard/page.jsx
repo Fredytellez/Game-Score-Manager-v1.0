@@ -1,14 +1,8 @@
-import DashboardPageComponent from '@/components/dashboard-component/DashboardComponent'
-import StoreProvider from '@/store/provider'
-import React from 'react'
+import DashboardPageComponent from "@/components/dashboard-component/DashboardComponent";
+import React from "react";
 
 const dashboardPage = () => {
-  return (
-    <StoreProvider>
-      <DashboardPageComponent/>
-    </StoreProvider>
-  )
-}
+  return <DashboardPageComponent />;
+};
 
-export default dashboardPage
-
+export default dashboardPage;

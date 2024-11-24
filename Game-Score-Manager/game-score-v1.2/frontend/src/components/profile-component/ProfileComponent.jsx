@@ -13,23 +13,25 @@ import {
 import { useSelector } from "react-redux";
 import ProfileImageComponent from "../profile-img-component/ProfileImageComponent";
 import { useDispatch } from "react-redux";
-import { logout } from "@/store/features/authSlice";
 import { useRouter } from "next/navigation";
+import { logout } from "@/store/features/usernameSlice";
 
 const ProfileComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const registerEmail = useSelector((state) => state.register.email);
-  const registerUsername = useSelector((state) => state.register.username);
-  const userEmail = registerUsername || "User Name";
+  const user = useSelector((state) => state.user.username);
+  const email = useSelector((state) => state.user.userEmail)
+  const userName = user || "Name";
 
-  const handleLogout = () => {
+  const handleLogout = (event) => {
+    event.preventDefault();
     // logica para el cierre de sesion.
     dispatch(logout());
     router.push("/login");
   };
 
-  const handleDashboardButton = () => {
+  const handleDashboardButton = (event) => {
+    event.preventDefault();
     router.push("/dashboard");
   };
 
@@ -65,8 +67,7 @@ const ProfileComponent = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto text-color">
               <Nav.Link onClick={handleDashboardButton}>Inicio</Nav.Link>
-              <Nav.Link href="scores">Puntuaciones</Nav.Link>
-              <NavDropdown title={userEmail} id="basic-nav-dropdown">
+              <NavDropdown title={userName} id="basic-nav-dropdown">
                 <NavDropdown.Item href="#">Another action</NavDropdown.Item>
                 <NavDropdown.Item href="#">Configuracion</NavDropdown.Item>
                 <NavDropdown.Divider />
@@ -115,7 +116,7 @@ const ProfileComponent = () => {
               </Form.Label>
               <Form.Control
                 type="text"
-                placeholder={registerUsername}
+                placeholder={userName}
                 disabled
                 style={{ fontSize: "0.775rem" }}
               />
@@ -133,7 +134,7 @@ const ProfileComponent = () => {
               </Form.Label>
               <Form.Control
                 type="email"
-                placeholder={registerEmail}
+                placeholder={email}
                 disabled
                 style={{ fontSize: "0.775rem" }}
               />

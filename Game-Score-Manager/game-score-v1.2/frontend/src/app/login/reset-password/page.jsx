@@ -1,12 +1,8 @@
-"use client"
-import ResetPasswordComponent from '@/components/login-component/ResetPasswordComponent'
+"use client";
+import ResetPasswordComponent from "@/components/login-component/ResetPasswordComponent";
 
 const resetPasswordPage = () => {
-  return (
-    <div>
-      <ResetPasswordComponent/>
-    </div>
-  )
-}
+  return <ResetPasswordComponent />;
+};
 
-export default resetPasswordPage
+export default resetPasswordPage;
