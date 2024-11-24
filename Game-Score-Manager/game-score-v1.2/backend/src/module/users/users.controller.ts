@@ -13,7 +13,6 @@ import {
   Post,
   Put,
   Res,
-  StreamableFile,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -21,8 +20,7 @@ import { UsersService } from './users.service';
 /* import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards'; */
 import { UpdateUserDto } from './dto/user.dto';
 import { User } from './interfaces/user.interface';
-import { createReadStream } from 'fs';
-import { extname, join } from 'path';
+import { extname } from 'path';
 import { CustomFileInterceptor } from './interceptors/file-upload.interceptors';
 import { Response } from 'express';
 import { ChangeRoleDto } from './dto/role.dto';
@@ -38,28 +36,6 @@ export class UsersController {
   @Get('profile/:userId')
   async getProfile(@Param('userId', ParseIntPipe) userId: number) {
     return this.usersService.findById(userId);
-  }
-
-  // Obtener la imagen de perfil
-  @Get('profile/image/:userId')
-  async getProfileImage(
-    @Param('userId') userId: number,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const user = await this.usersService.findById(userId);
-    if (!user.profileImage) {
-      return null;
-    }
-
-    const file = createReadStream(
-      join(process.cwd(), 'uploads/profiles', user.profileImage),
-    );
-    res.set({
-      'Content-Type': 'image/jpeg',
-      'Content-Disposition': `inline; filename="${user.profileImage}"`,
-    });
-    console.log(user, file);
-    return new StreamableFile(file);
   }
 
   //Obteder todos los usuarios
@@ -130,7 +106,7 @@ export class UsersController {
       throw new BadRequestException('No se ha proporcionado ningún archivo');
     }
 
-    // Ruta relativa del archivo subido
+    // Ruta relativa del archivo cargado
     const filePath = `modules/uploads/${file.filename}`;
 
     // Delegar la lógica al servicio
