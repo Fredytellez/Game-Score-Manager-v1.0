@@ -140,29 +140,6 @@
         ]
       }
     },
-    "/users/profile/image/{userId}": {
-      "get": {
-        "operationId": "UsersController_getProfileImage",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Users"
-        ]
-      }
-    },
     "/users/admin/all-users": {
       "get": {
         "operationId": "UsersController_findAll",

@@ -10,9 +10,10 @@ export class AuthController {
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     const user = await this.authService.register(registerDto);
-    const token = await this.authService.generateToken(user);
+    console.log(user);
+    /* const token = await this.authService.generateToken(user); */
     return {
-      token: token,
+      /*  token: token, */
       user: user,
     };
   }
@@ -20,9 +21,10 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     const user = await this.authService.login(loginDto);
-    const token = await this.authService.generateToken(user);
+    /* const token = await this.authService.generateToken(user); */
+    console.log(user);
     return {
-      token: token,
+      /* token: token, */
       user: user,
     };
   }

@@ -158,6 +158,8 @@ export class UsersService {
         },
       });
 
+      console.log(updatedUser);
+
       return updatedUser;
     } catch (error) {
       console.error(error);
