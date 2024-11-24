@@ -1,13 +1,8 @@
-import ProfileComponent from '@/components/profile-component/ProfileComponent'
-import StoreProvider from '@/store/provider'
-import React from 'react'
+import ProfileComponent from "@/components/profile-component/ProfileComponent";
+import React from "react";
 
 const ProfilePage = () => {
-  return (
-    <StoreProvider>
-        <ProfileComponent/>
-    </StoreProvider>
-  )
-}
+  return <ProfileComponent />;
+};
 
-export default ProfilePage
+export default ProfilePage;

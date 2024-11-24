@@ -1,13 +1,8 @@
-import DashboardScoresComponent from '@/components/dashboard-scores/DashboardScoresComponent'
-import StoreProvider from '@/store/provider'
-import React from 'react'
+import DashboardScoresComponent from "@/components/dashboard-scores/DashboardScoresComponent";
+import React from "react";
 
 const dashboardScoresPage = () => {
-  return (
-    <StoreProvider>
-        <DashboardScoresComponent/>
-    </StoreProvider>
-  )
-}
+  return <DashboardScoresComponent />;
+};
 
-export default dashboardScoresPage
+export default dashboardScoresPage;

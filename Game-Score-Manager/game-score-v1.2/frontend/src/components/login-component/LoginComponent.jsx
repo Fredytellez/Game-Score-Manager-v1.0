@@ -1,6 +1,6 @@
+"use client"
 import { useInputHook } from "@/app/hooks/input-hooks";
-import { setToken } from "@/store/features/authSlice";
-import { setEmail } from "@/store/features/loginSlice";
+import { setUserEmail, setUsername } from "@/store/features/usernameSlice";
 import { useLoginUserMutation } from "@/store/services/user.api";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -26,43 +26,44 @@ const LoginComponent = () => {
     reset: resetPassword,
   } = useInputHook();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null);
-    loginUser({ email: valueEmail, password: valuePassword })
-      .unwrap()
-      .then((data) => {
-        console.log(data);
-        //Guarda el token
-        localStorage.setItem("token", data.token);
-        dispatch(setToken(data.token));
-        dispatch(setEmail(valueEmail));
-        resetEmail();
-        resetPassword();
-        // Redirige al dash una vex inicie sesion
-        router.push("dashboard");
-      })
-      .catch((err) => {
-        if (err.status === 401) {
-          setError("Correo o contraseña no coinciden."); // Mensaje de error personalizado
-        } else {
-          setError("Ha ocurrido un error. Por favor intentalo de nuevo."); // Otro tipo de error
-        }
-      });
+    try {
+      const data = await loginUser({
+        email: valueEmail,
+        password: valuePassword,
+      }).unwrap();
+      console.log("Login exitoso:", data);
+      resetEmail();
+      resetPassword();
+      dispatch(setUsername(data.user.username));
+      dispatch(setUserEmail(data.user.email))
+      router.push("dashboard");
+    } catch (error) {
+      console.error("Error en el login:", error);
+      if (error.status === 401) {
+        setError("Correo o contraseña no coinciden.");
+      } else {
+        setError("Ha ocurrido un error. Por favor intentalo de nuevo.");
+      }
+    }
   };
 
-  const handleRegisterButton = () => {
+  const handleRegisterButton = (event) => {
+    event.preventDefault();
     router.push("/register");
   };
 
-  const handleRessetPassword = () => {
+  const handleRessetPassword = (event) => {
+    event.preventDefault();
     router.push("/login/reset-password");
   };
 
-  const handleHomeButton = () => {
+  const handleHomeButton = (event) => {
+    event.preventDefault();
     router.push("/");
   };
-
 
   return (
     <div
@@ -87,12 +88,16 @@ const LoginComponent = () => {
         style={{ backgroundColor: "rgba(39, 40, 67, 0.61)" }}
       >
         <Container>
-          <Navbar.Brand href="/"><span className="score-logo">Game Score Manager</span></Navbar.Brand>
+          <Navbar.Brand href="/">
+            <span className="score-logo">Game Score Manager</span>
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto text-color">
-            <Nav.Link onClick={handleHomeButton}>Inicio</Nav.Link>
-              <Nav.Link onClick={handleRegisterButton} className="nav-link">Registrate</Nav.Link>
+              <Nav.Link onClick={handleHomeButton}>Inicio</Nav.Link>
+              <Nav.Link onClick={handleRegisterButton} className="nav-link">
+                Registrate
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -111,7 +116,8 @@ const LoginComponent = () => {
         <h1 className="text-center">Inicia Sesion</h1>
         <Form.Group className="mb-3" controlId="formGroupEmail">
           <Form.Label>Correo</Form.Label>
-          <Form.Control style={{ fontSize: "0.875rem" }}
+          <Form.Control
+            style={{ fontSize: "0.875rem" }}
             type="email"
             placeholder="Ingresa tu email"
             required
@@ -120,7 +126,8 @@ const LoginComponent = () => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="formGroupPassword">
           <Form.Label>Contraseña</Form.Label>
-          <Form.Control style={{ fontSize: "0.875rem" }}
+          <Form.Control
+            style={{ fontSize: "0.875rem" }}
             type="password"
             placeholder="Contraseña"
             required

@@ -1,6 +1,6 @@
+"use client"
 import { useInputHook } from "@/app/hooks/input-hooks";
 import validationHook from "@/app/hooks/validation-hook";
-import { setToken } from "@/store/features/authSlice";
 import {
   setPassword,
   setEmail,
@@ -59,30 +59,20 @@ const RegisterComponent = () => {
         email: valueEmail,
         password: valuePassword,
       }).unwrap();
-      console.log(data);
-
-      localStorage.setItem("token", data.token);
-      dispatch(setToken(data.token));
+      console.log("registro exitoso", data);
+      dispatch(setUserName(data.user.username))
       router.push("/dashboard");
     } catch (error) {
       console.error(error);
-      if (error.originalStatus === 404) {
-        alert("The endpoint was not found. Please check the URL.");
-      } else {
-        alert("Error al registrar el usuario: " + error.data || error.message);
-      }
     }
-
-    dispatch(setUserName(valueUserName));
-    dispatch(setEmail(valueEmail));
-    dispatch(setPassword(valuePassword));
-    router.push("/dashboard");
   };
 
-  const handleLoginButton = () => {
+  const handleLoginButton = (event) => {
+    event.preventDefault();
     router.push("/login");
   };
-  const handleHomeButton = () => {
+  const handleHomeButton = (event) => {
+    event.preventDefault();
     router.push("/");
   };
 
@@ -109,7 +99,9 @@ const RegisterComponent = () => {
         style={{ backgroundColor: "rgba(39, 40, 67, 0.61)" }}
       >
         <Container>
-          <Navbar.Brand href="home"><span className="score-logo">Game Score Manager</span></Navbar.Brand>
+          <Navbar.Brand href="home">
+            <span className="score-logo">Game Score Manager</span>
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto text-color">
@@ -134,8 +126,11 @@ const RegisterComponent = () => {
       >
         <h1 className="text-center pt-2">Crea una cuenta</h1>
         <Form.Group className="mb-2" controlId="formGroupUsername">
-          <Form.Label className="mb-1" style={{ fontSize: "0.875rem" }}>Nombre de usuario</Form.Label>
-          <Form.Control style={{ fontSize: "0.875rem" }}
+          <Form.Label className="mb-1" style={{ fontSize: "0.875rem" }}>
+            Nombre de usuario
+          </Form.Label>
+          <Form.Control
+            style={{ fontSize: "0.875rem" }}
             type="text"
             placeholder="Ingresa tu usuario"
             isInvalid={!!errors.username}
@@ -147,8 +142,11 @@ const RegisterComponent = () => {
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-2" controlId="formGroupEmail">
-          <Form.Label className="mb-1" style={{ fontSize: "0.875rem" }}>Email</Form.Label>
-          <Form.Control style={{ fontSize: "0.875rem" }}
+          <Form.Label className="mb-1" style={{ fontSize: "0.875rem" }}>
+            Email
+          </Form.Label>
+          <Form.Control
+            style={{ fontSize: "0.875rem" }}
             type="email"
             placeholder="Ingresa un email"
             required
@@ -157,8 +155,11 @@ const RegisterComponent = () => {
         </Form.Group>
 
         <Form.Group className="mb-2" controlId="formGroupPassword">
-          <Form.Label className="mb-1" style={{ fontSize: "0.875rem" }}>Contraseña</Form.Label>
-          <Form.Control style={{ fontSize: "0.875rem" }}
+          <Form.Label className="mb-1" style={{ fontSize: "0.875rem" }}>
+            Contraseña
+          </Form.Label>
+          <Form.Control
+            style={{ fontSize: "0.875rem" }}
             type="password"
             placeholder="contraseña"
             isInvalid={!!errors.password}
@@ -171,8 +172,11 @@ const RegisterComponent = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formGroupConfirmPassword">
-          <Form.Label className="mb-1" style={{ fontSize: "0.875rem" }}>Confirma tu contraseña</Form.Label>
-          <Form.Control style={{ fontSize: "0.875rem" }}
+          <Form.Label className="mb-1" style={{ fontSize: "0.875rem" }}>
+            Confirma tu contraseña
+          </Form.Label>
+          <Form.Control
+            style={{ fontSize: "0.875rem" }}
             type="password"
             placeholder="confirmar contraseña"
             isInvalid={!!errors.confirmPassword}
@@ -184,7 +188,11 @@ const RegisterComponent = () => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Button variant="primary" type="submit" className="w-100 mb-3 button-form">
+        <Button
+          variant="primary"
+          type="submit"
+          className="w-100 mb-3 button-form"
+        >
           Registro
         </Button>
 

@@ -1,4 +1,5 @@
 "use client";
+import { logout } from "@/store/features/usernameSlice";
 import { useRouter } from "next/navigation";
 import React from "react";
 import {
@@ -12,15 +13,13 @@ import {
   Table,
 } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { logout } from "@/store/features/authSlice";
 import { useDispatch } from "react-redux";
 
 const DashboardScoresComponent = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const loginEmail = useSelector((state) => state.login.email);
-  const registerEmail = useSelector((state) => state.register.username);
-  const userEmail = loginEmail || registerEmail || "User Name";
+  const user = useSelector((state) => state.user.username);
+  const userName = user || "Name";
 
   const handleLogout = () => {
     // logica para el cierre de sesion.
@@ -28,10 +27,12 @@ const DashboardScoresComponent = () => {
     router.push("/login");
   };
 
-  const handleDashboardProfile = () => {
+  const handleDashboardProfile = (event) => {
+    event.preventDefault();
     router.push("profile");
   };
-  const handleDashboardButton = () => {
+  const handleDashboardButton = (event) => {
+    event.preventDefault();
     router.push("/dashboard");
   };
 
@@ -53,21 +54,22 @@ const DashboardScoresComponent = () => {
           style={{ backgroundColor: "rgba(39, 40, 67, 0.61)" }}
         >
           <Container>
-            <Navbar.Brand href="dashboard">
+            <Navbar.Brand>
               <span className="score-logo">Game Score Manager</span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ms-auto text-color">
                 <Nav.Link onClick={handleDashboardButton}>Inicio</Nav.Link>
-                <Nav.Link href="scores">Puntuaciones</Nav.Link>
+                <div className="profile-container">
                 <Image
                   src="/images/img-profile.png"
                   rounded
                   className="profile-image"
                 />
+                </div>
                 {/* <ProfileImageComponent /> */}
-                <NavDropdown title={userEmail} id="basic-nav-dropdown">
+                <NavDropdown title={userName} id="basic-nav-dropdown">
                   <NavDropdown.Item onClick={handleDashboardProfile}>
                     Perfil
                   </NavDropdown.Item>

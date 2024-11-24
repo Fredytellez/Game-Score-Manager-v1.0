@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import { Container, Button, Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -24,7 +25,7 @@ const ProfileImageComponent = ({ style }) => {
     if (!selectedFile || !currentUser) return;
 
     const formData = new FormData();
-    formData.append("profileImage", selectedFile);
+    formData.append("file", selectedFile);
 
     try {
       await updateProfile({ userId: currentUser.id, formData }).unwrap();
